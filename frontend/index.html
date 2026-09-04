@@ -3598,7 +3598,6 @@ let pendingPurchase = null;
 
     This fixes the image swapping issue.
 */
-
 const productImages = {
     1: "chicken-protein-bowl.png",
     2: "grilled-chicken-meal.png",
@@ -3606,14 +3605,13 @@ const productImages = {
     4: "high-protein-combo.png",
     5: "chicken-tikka-wrap.png",
     6: "protein-smoothie.png",
-    9: "chicken-dum-biryani.png",
-    10: "chicken-fry-biryani.png",
-    11: "mutton-biryani.png",
-    12: "veg-dum-biryani.png",
-    13: "mango-protein-smoothie.png",
-    14: "apricot-delight.png"
+    7: "chicken-dum-biryani.png",
+    8: "chicken-fry-biryani.png",
+    9: "mutton-biryani.png",
+    10: "veg-dum-biryani.png",
+    11: "mango-protein-smoothie.png",
+    12: "apricot-delight.png"
 };
-
 
 /* =========================================================
    PRODUCT-SPECIFIC IMAGE RESOLVER
@@ -3626,26 +3624,8 @@ function getProductImage(product) {
         return mappedImage;
     }
 
-    const name = String(product?.name || "").trim().toLowerCase();
-
-    const imagesByName = {
-        "chicken protein bowl": "chicken-protein-bowl.png",
-        "grilled chicken meal": "grilled-chicken-meal.png",
-        "paneer power bowl": "paneer-power-bowl.png",
-        "high protein combo": "high-protein-combo.png",
-        "chicken tikka wrap": "chicken-tikka-wrap.png",
-        "protein smoothie": "protein-smoothie.png",
-        "chicken dum biryani": "chicken-dum-biryani.png",
-        "chicken fry biryani": "chicken-fry-biryani.png",
-        "mutton biryani": "mutton-biryani.png",
-        "veg dum biryani": "veg-dum-biryani.png",
-        "mango protein smoothie": "mango-protein-smoothie.png",
-        "apricot delight": "apricot-delight.png"
-    };
-
-    return imagesByName[name] || product?.image || null;
+    return product?.image || null;
 }
-
 
 /* =========================================================
    MONEY
