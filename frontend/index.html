@@ -3626,7 +3626,24 @@ function getProductImage(product) {
         return mappedImage;
     }
 
-    return product?.image || null;
+    const name = String(product?.name || "").trim().toLowerCase();
+
+    const imagesByName = {
+        "chicken protein bowl": "chicken-protein-bowl.png",
+        "grilled chicken meal": "grilled-chicken-meal.png",
+        "paneer power bowl": "paneer-power-bowl.png",
+        "high protein combo": "high-protein-combo.png",
+        "chicken tikka wrap": "chicken-tikka-wrap.png",
+        "protein smoothie": "protein-smoothie.png",
+        "chicken dum biryani": "chicken-dum-biryani.png",
+        "chicken fry biryani": "chicken-fry-biryani.png",
+        "mutton biryani": "mutton-biryani.png",
+        "veg dum biryani": "veg-dum-biryani.png",
+        "mango protein smoothie": "mango-protein-smoothie.png",
+        "apricot delight": "apricot-delight.png"
+    };
+
+    return imagesByName[name] || product?.image || null;
 }
 
 
