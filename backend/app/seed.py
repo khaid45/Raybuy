@@ -3,11 +3,10 @@ from decimal import Decimal
 from sqlalchemy import select
 
 from app.database import SessionLocal
-from app.models import Merchant, Product
+from app.models import Merchant, Product, User, SpendingPolicy
 
 
 MERCHANT_NAME = "Protein Kitchen"
-
 
 PRODUCTS = [
     {
@@ -94,6 +93,48 @@ PRODUCTS = [
             "tags": ["protein", "smoothie"],
         },
     },
+    {
+        "name": "Chicken Dum Biryani",
+        "description": "Aromatic basmati rice cooked with tender chicken, traditional spices and saffron.",
+        "category": "food",
+        "price": Decimal("399.00"),
+        "metadata_json": {},
+    },
+    {
+        "name": "Chicken Fry Biryani",
+        "description": "Flavorful biryani with crispy fried chicken, basmati rice and aromatic spices.",
+        "category": "food",
+        "price": Decimal("429.00"),
+        "metadata_json": {},
+    },
+    {
+        "name": "Mutton Biryani",
+        "description": "Rich and aromatic basmati biryani prepared with tender mutton and traditional spices.",
+        "category": "food",
+        "price": Decimal("499.00"),
+        "metadata_json": {},
+    },
+    {
+        "name": "Veg Dum Biryani",
+        "description": "Fragrant basmati rice slow-cooked with fresh vegetables, herbs and aromatic spices.",
+        "category": "food",
+        "price": Decimal("299.00"),
+        "metadata_json": {},
+    },
+    {
+        "name": "Mango Protein Smoothie",
+        "description": "Refreshing mango smoothie blended with milk, banana and protein.",
+        "category": "food",
+        "price": Decimal("229.00"),
+        "metadata_json": {},
+    },
+    {
+        "name": "Apricot Delight",
+        "description": "Creamy apricot dessert with a smooth texture and naturally sweet fruity flavor.",
+        "category": "food",
+        "price": Decimal("249.00"),
+        "metadata_json": {},
+    },
 ]
 
 
@@ -101,8 +142,49 @@ def seed_catalog():
     db = SessionLocal()
 
     try:
+        # -------------------------------------------------
+        # USER
+        # -------------------------------------------------
+        user = db.scalar(
+            select(User).where(User.id == 2)
+        )
+
+        if user is None:
+            user = User(
+                id=2,
+                name="RayBuy Demo User",
+                email="demo@raybuy.local",
+                currency="INR",
+            )
+            db.add(user)
+            db.flush()
+
+        # -------------------------------------------------
+        # SPENDING POLICY
+        # -------------------------------------------------
+        policy = db.scalar(
+            select(SpendingPolicy).where(
+                SpendingPolicy.user_id == user.id
+            )
+        )
+
+        if policy is None:
+            policy = SpendingPolicy(
+                user_id=user.id,
+                max_transaction_amount=Decimal("500.00"),
+                daily_limit=Decimal("2000.00"),
+                allowed_categories=["food"],
+                approval_required=True,
+            )
+            db.add(policy)
+
+        # -------------------------------------------------
+        # MERCHANT
+        # -------------------------------------------------
         merchant = db.scalar(
-            select(Merchant).where(Merchant.name == MERCHANT_NAME)
+            select(Merchant).where(
+                Merchant.name == MERCHANT_NAME
+            )
         )
 
         if merchant is None:
@@ -115,10 +197,15 @@ def seed_catalog():
             db.add(merchant)
             db.flush()
 
+        # -------------------------------------------------
+        # PRODUCTS
+        # -------------------------------------------------
         existing_products = {
             product.name
             for product in db.scalars(
-                select(Product).where(Product.merchant_id == merchant.id)
+                select(Product).where(
+                    Product.merchant_id == merchant.id
+                )
             ).all()
         }
 
@@ -140,6 +227,8 @@ def seed_catalog():
 
         db.commit()
 
+        print(f"User: {user.name} (ID {user.id})")
+        print(f"Spending policy: ₹500 transaction / ₹2000 daily")
         print(f"Merchant: {merchant.name}")
         print(f"Products added: {added}")
 
