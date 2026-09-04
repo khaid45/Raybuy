@@ -3711,9 +3711,14 @@ function addMessage(text, type) {
     bubble.className =
         "message-bubble";
 
-    bubble.textContent =
-        text;
+   const safeText = escapeHTML(text);
 
+bubble.innerHTML =
+    type === "ai"
+        ? safeText
+            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.+?)\*/g, "<em>$1</em>")
+        : safeText;
 
     message.appendChild(bubble);
 
