@@ -3620,8 +3620,13 @@ const productImages = {
 ========================================================= */
 
 function getProductImage(product) {
-    if (product && product.image) return product.image;
-    return productImages[Number(product?.id)] || null;
+    const mappedImage = productImages[Number(product?.id)];
+
+    if (mappedImage) {
+        return mappedImage;
+    }
+
+    return product?.image || null;
 }
 
 
